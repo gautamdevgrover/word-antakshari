@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Match {
+  id           String       @id @default(uuid())
+  roomCode     String
+  player1Name  String
+  player2Name  String
+  player1Score Int
+  player2Score Int
+  winnerName   String
+  roundsPlayed Int
+  totalWords   Int
+  createdAt    DateTime     @default(now())
+  rounds       MatchRound[]
+}
+
+model MatchRound {
+  id          String   @id @default(uuid())
+  matchId     String
+  roundNumber Int
+  winnerName  String
+  reason      String
+  createdAt   DateTime @default(now())
+  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+}
